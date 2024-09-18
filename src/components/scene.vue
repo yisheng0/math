@@ -1,15 +1,15 @@
 <script setup>
-import { onMounted, onUnmounted, ref, provide } from 'vue'
+import { onMounted, onUnmounted, ref, provide ,inject } from 'vue'
 import { ThreeApp } from './js/ThreeApp'
 import { injectObject3D } from './js/state';
 let webgl = ref(null)
 let threeApp
 const cubeObj = injectObject3D()
-provide('object3D', cubeObj)
 onMounted(() => {
     threeApp = new ThreeApp(webgl.value)
     threeApp.scene.add(cubeObj.getMesh())
     threeApp.render()
+    window.threeApp = threeApp
 })
 onUnmounted(() => {
     threeApp.clear()

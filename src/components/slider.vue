@@ -1,6 +1,6 @@
 <template>
     <el-card style="width: 15vw; background-color: #FBFBFB;" shadow="always">
-        <div class="slider-demo-block">
+        <div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span style="margin: -5px;">{{stringValue}}</span>
                 <el-tag type="info" style="width: 36px;">{{ value }}</el-tag>
@@ -10,7 +10,7 @@
     </el-card>
 </template>
 <script setup>
-import { ref, defineProps, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { injectObject3D } from './js/state';
 const props = defineProps({
   type: {

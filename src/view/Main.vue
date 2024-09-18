@@ -2,26 +2,35 @@
     <div id="header"></div>
     <div id="main">
         <div id="left">
-            <slider type="width" style="margin-bottom: 40px;"/>
-            <slider type="length" style="margin-bottom: 40px;"/>
-            <slider type="height" style="margin-bottom: 40px;"/>
-            <colorSwitch style="margin-bottom: 40px;"/>
-            <rotation style="margin-bottom: 40px;"/>
+            <slider type="width" style="margin-bottom: 40px;" />
+            <slider type="length" style="margin-bottom: 40px;" />
+            <slider type="height" style="margin-bottom: 40px;" />
+            <colorSwitch style="margin-bottom: 40px;" />
+            <rotation style="margin-bottom: 40px;" />
         </div>
         <div id="middle">
-            <scene/>
+            <scene />
         </div>
-        <div id="right"></div>
+        <div id="right">
+            <snapshot v-if="isReady" />
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import scene from '@/components/scene.vue';
-import { slider, colorSwitch, rotation } from '@/components'
+import { slider, colorSwitch, rotation, snapshot } from '@/components'
 import { provideObject3D } from '../components/js/state';
-
 provideObject3D()
+
+let isReady = ref(false)
+onMounted(() => {
+    nextTick(() => {
+        isReady.value = true
+        // console.log(window.threeApp)
+    })
+})
 </script>
 
 <style scoped>
@@ -56,11 +65,11 @@ provideObject3D()
     user-select: none;
 }
 
-:deep(.el-slider__bar ){
+:deep(.el-slider__bar) {
     background-color: #7D72EE;
 }
 
-:deep(.el-slider__button)  {
+:deep(.el-slider__button) {
     border: 2px solid #7D72EE;
 }
 </style>
