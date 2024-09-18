@@ -1,11 +1,12 @@
 <template>
-    <div id="header" />
+    <div id="header"></div>
     <div id="main">
         <div id="left">
-            <slider/>
-            <slider/>
-            <slider/>
-            <colorSwitch/>
+            <slider type="width" style="margin-bottom: 40px;"/>
+            <slider type="length" style="margin-bottom: 40px;"/>
+            <slider type="height" style="margin-bottom: 40px;"/>
+            <colorSwitch style="margin-bottom: 40px;"/>
+            <rotation style="margin-bottom: 40px;"/>
         </div>
         <div id="middle">
             <scene/>
@@ -15,11 +16,12 @@
 </template>
 
 <script setup>
-// import {ElCard, ElButton} from 'element-plus'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import scene from '@/components/scene.vue';
-import { slider, colorSwitch } from '@/components'
+import { slider, colorSwitch, rotation } from '@/components'
+import { provideObject3D } from '../components/js/state';
 
+provideObject3D()
 </script>
 
 <style scoped>
@@ -40,7 +42,7 @@ import { slider, colorSwitch } from '@/components'
     align-items: center;
     flex-direction: column;
     user-select: none;
-    justify-content: space-around;
+
 }
 
 #middle {

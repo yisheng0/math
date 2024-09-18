@@ -2,7 +2,7 @@ import * as resize from "./system/resize"
 import * as THREE from "three"
 import { createCamera } from "./base/camera"
 import { createScene } from "./base/scene"
-import { createCube } from "./geometry/cube"
+import { Cube } from "./geometry/cube"
 import { createRenderer } from "./base/renderer"
 import { createControl } from "./base/control"
 import addLight from "./base/light"
@@ -27,9 +27,6 @@ class ThreeApp {
         this.scene = createScene()
         // 光源
         addLight(this.scene)
-        // 场景组成内容 object3D
-        const cube = createCube()
-        this.scene.add(cube)
         // 渲染器 renderer
         this.renderer = createRenderer(this.container,this.sizes)
         resize.resizeEventListener(this.camera, this.renderer)

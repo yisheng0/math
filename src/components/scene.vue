@@ -1,11 +1,14 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
-import {ThreeApp} from './js/ThreeApp'
-var webgl = ref(null)
-var threeApp
+import { onMounted, onUnmounted, ref, provide } from 'vue'
+import { ThreeApp } from './js/ThreeApp'
+import { injectObject3D } from './js/state';
+let webgl = ref(null)
+let threeApp
+const cubeObj = injectObject3D()
+provide('object3D', cubeObj)
 onMounted(() => {
-    console.log("hello threejs")
     threeApp = new ThreeApp(webgl.value)
+    threeApp.scene.add(cubeObj.getMesh())
     threeApp.render()
 })
 onUnmounted(() => {
@@ -17,7 +20,7 @@ onUnmounted(() => {
 </template>
 <style>
 .webgl {
-   width: 100%;
-   height: 100%;
+    width: 100%;
+    height: 100%;
 }
 </style>

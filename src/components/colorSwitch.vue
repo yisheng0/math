@@ -1,18 +1,20 @@
 <script setup>
 import { ref } from 'vue';
+import { injectObject3D } from './js/state';
+const object3D = injectObject3D();
 const selectedColor = ref('');
-
 const colors = [
+  '#A6ADB4',
   'aqua',
   '#BAE3A8',
   '#7D72EE',
-  '#4175E4',
-  '#A6ADB4'
+  '#DC6374'
 ];
 
 function handleColorClick(color) {
   selectedColor.value = color;
-  console.log(selectedColor.value);
+  // console.log(selectedColor.value);
+  object3D.setColor(selectedColor.value);
 }
 
 </script>

@@ -4,7 +4,7 @@ function createCamera(sizes){
     camera.rotation.order = 'YXZ'
     const PerspectiveVectors = {
         first: new Vector3(0,1.7,0.3),
-        third: new Vector3(0,2,-2)
+        third: new Vector3(0,10,-10)
     }
     camera.position.copy(PerspectiveVectors.third)
     camera.lookAt(0,1,0)

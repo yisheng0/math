@@ -1,14 +1,14 @@
 import { WebGLRenderer, VSMShadowMap,ACESFilmicToneMapping,SRGBColorSpace } from 'three';
 
 function createRenderer(container,sizes) {
-    console.log('createRenderer',container)
+    // console.log('createRenderer',container)
     const renderer = new WebGLRenderer({
         canvas: container,
         antialias: true, //抗锯齿
     })
     const width = container.clientWidth;
     const height = container.clientHeight;
-    console.log('renderer size',width,height)
+    // console.log('renderer size',width,height)
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = VSMShadowMap
