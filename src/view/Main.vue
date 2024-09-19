@@ -13,6 +13,7 @@
         </div>
         <div id="right">
             <snapshot v-if="isReady" />
+            <frontArrow style="margin-top: 5vh;"/>
         </div>
     </div>
 </template>
@@ -20,12 +21,13 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
 import scene from '@/components/scene.vue';
-import { slider, colorSwitch, rotation, snapshot } from '@/components'
+import { slider, colorSwitch, rotation, snapshot, frontArrow } from '@/components'
 import { provideObject3D } from '../components/js/state';
 provideObject3D()
 
 let isReady = ref(false)
 onMounted(() => {
+    
     nextTick(() => {
         isReady.value = true
         // console.log(window.threeApp)
@@ -63,6 +65,9 @@ onMounted(() => {
     background-color: #FEFEFE;
     flex: 0 0 20%;
     user-select: none;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 :deep(.el-slider__bar) {

@@ -2,9 +2,11 @@ import slider from "./slider.vue";
 import colorSwitch from "./colorSwitch.vue";
 import rotation from "./rotation.vue";
 import snapshot from "./snapshot.vue";
+import frontArrow from "./frontArrow.vue";
 export {
     slider,
     colorSwitch,
     rotation,
-    snapshot
+    snapshot,
+    frontArrow,
 }

@@ -52,7 +52,7 @@ class ThreeApp {
     }
     takeSnapshot(position){
         // console.log(...position)
-        let shotCamera = new THREE.PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 1000)
+        let shotCamera = new THREE.PerspectiveCamera(30, this.sizes.width / this.sizes.height, 0.3, 100)
         shotCamera.position.set(...position)
         shotCamera.lookAt(0,0,0)
         this.renderer.render(this.scene, shotCamera);
