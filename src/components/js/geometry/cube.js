@@ -15,6 +15,8 @@ import {
   Sprite,
   CanvasTexture,
 } from "three";
+import { DashedLine } from "./tool/line";
+import { reactive } from "vue";
 
 class Cube {
   constructor() {
@@ -34,7 +36,6 @@ class Cube {
     this.dashedEdges = new LineSegments(edges, dashedMaterial);
     this.cube.add(this.dashedEdges);
     // console.log(this.cube)
-    this.drawDashedLine();
     // 自动旋转
     this.animationFrameId = null;
     // 正箭头
@@ -42,13 +43,18 @@ class Cube {
 
     // 创建八个顶点的标签
     this.vertexLabels = [];
-    this.addVertexLabels();
+    // this.addVertexLabels();
+    this.line = new DashedLine(this.cube);
+    this.stateContext = reactive({
+      isRender: false,
+    });
   }
 
   // Method to modify the width
   setWidth(width) {
     this.geometry.parameters.width = width;
     this.updateGeometry();
+    this.stateContext.isRender = true;
   }
 
   // Method to modify the height
@@ -134,47 +140,8 @@ class Cube {
     }
   }
 
-  drawDashedLine() {
-    // 计算立方体的左下角
-    const halfWidth = this.geometry.parameters.width / 2;
-    const halfHeight = this.geometry.parameters.height / 2;
-    const halfDepth = this.geometry.parameters.depth / 2;
-    let point1 = new Vector3(0, 0, 0);
-    let point2 = new Vector3(2, 4, 0);
-
-    const geometry = new BufferGeometry().setFromPoints([point1, point2]);
-    const material = new LineDashedMaterial({
-      color: 0x000000,
-      dashSize: 0.5,
-      gapSize: 0.2,
-    });
-
-    // 创建线条并添加到立方体
-    const line = new Line(geometry, material);
-    line.computeLineDistances();
-    const matrix = new Matrix4();
-    matrix.set(
-      1,
-      0,
-      0,
-      -halfWidth,
-      0,
-      1,
-      0,
-      -halfHeight,
-      0,
-      0,
-      1,
-      -halfDepth,
-      0,
-      0,
-      0,
-      1
-    );
-
-    // 应用矩阵到线条对象上
-    line.applyMatrix4(matrix);
-    this.cube.add(line);
+  drawDashedLine(p1, p2, id) {
+    this.line.drawDashedLine(p1, p2, id);
   }
 
   addVertexLabels() {
