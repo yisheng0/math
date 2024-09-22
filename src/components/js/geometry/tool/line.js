@@ -22,6 +22,9 @@ class DashedLine {
     this.line = null;
   }
   drawDashedLine(p1, p2, id) {
+    if(this.lineMap.has(id)){
+      this.cancelDashedLine(id);
+    }
     // 计算立方体的左下角
     const halfWidth = this.cube.geometry.parameters.width / 2;
     const halfHeight = this.cube.geometry.parameters.height / 2;

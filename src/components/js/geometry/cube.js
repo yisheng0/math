@@ -14,9 +14,11 @@ import {
   SpriteMaterial,
   Sprite,
   CanvasTexture,
+  BufferAttribute
 } from "three";
 import { DashedLine } from "./tool/line";
 import { reactive } from "vue";
+import { it } from "element-plus/es/locales.mjs";
 
 class Cube {
   constructor() {
@@ -76,15 +78,54 @@ class Cube {
 
   // Helper method to update geometry
   updateGeometry() {
+    // cube
     this.geometry = new BoxGeometry(
       this.geometry.parameters.width,
       this.geometry.parameters.height,
       this.geometry.parameters.depth
     );
     this.cube.geometry = this.geometry;
+    // 边框更新
+    let indexMap = {
+      0: this.geometry.parameters.width,
+      1: this.geometry.parameters.height,
+      2: this.geometry.parameters.depth,
+    };
     const edges = new EdgesGeometry(this.geometry);
     this.dashedEdges.geometry.dispose();
     this.dashedEdges.geometry = edges;
+    // 虚线
+    let arr = this.line.pObject.filter((item) => item.isLock !== false);
+    console.log(arr);
+    for (let item of arr) {
+      let line = this.line.lineMap.get(item.id);
+      let P1 = item.P1.split(",").map(Number);
+      let P2 = item.P2.split(",").map(Number);
+      if (item.isLock[0].length > 0) {
+        for (let index of item.isLock[0]) {
+        }
+      }
+      if (item.isLock[1].length > 0) {
+        for (let index of item.isLock[1]) {
+          P2[index] = indexMap[index];
+        }
+      }
+      item.P1 = P1.join(",");
+      item.P2 = P2.join(",");
+      // const positions = new Float32Array([
+      //  ...P1,
+      //  ...P2,
+      // ]);
+      // line.geometry.dispose();
+      // line.geometry.setAttribute(
+      //   "position",
+      //   new BufferAttribute(positions, 3)
+      // );
+      
+      // line.geometry.attributes.position.needsUpdate = true; // 标记为需要更新
+      this.cube.remove(line);
+      this.drawDashedLine(P1, P2, item.id)
+    }
   }
 
   // Method to get the cube mesh

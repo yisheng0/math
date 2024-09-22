@@ -7,12 +7,12 @@
             </div>
         </el-card>
         <div v-for="(item, index) in pObject" :key="index" style="margin-bottom: 20px;">
-            <el-card style="width: 15vw; height: 15vh; background-color: #FBFBFB;display:relative" shadow="always">
-                <div style="display: flex; align-items: center; flex-direction: column; ">
+            <el-card style="width: 15vw; height: 18vh; background-color: #FBFBFB;display:relative" shadow="always">
+                <div style="display: flex; align-items: center; flex-direction: column;">
                     <div style="width: 12vw;display: flex; align-items: center; justify-content: space-between;">
-                        <input type="text" style="width: auto; outline: none; border: none; width:4vw"
+                        <input type="text" style="width: auto; outline: none; border: none; width:4vw; font-size: 1.2em;"
                             :disabled="isEditor" v-model="item.id">
-                        <div style="display: flex;">
+                        <div style="display: flex; justify-content: center; align-items: baseline;">
                             <div style="margin-right: 8px;">
                                 <el-icon @click="changeEditor(item)" v-if="isEditor">
                                     <Lock />
@@ -21,21 +21,26 @@
                                     <Check />
                                 </el-icon>
                             </div>
-                            <el-icon>
+                            <el-icon style="margin-right: 8px;">
                                 <CircleClose @click="cancel(item)" />
+                            </el-icon>
+                            <el-icon @click="lock(item)" :class="{ 'is-locked': isLock }">
+                                <IceCreamRound />
                             </el-icon>
                         </div>
                     </div>
 
                     <el-divider border-style="double" style="margin: 10px;" />
                     <div>
-                        p1
-                        (<input type="text" style="width: auto; outline: none; border: none; width:7vw"
+                        <span style="font-size: 1.2em; display:inline-block;">p1</span> 
+                        &nbsp &nbsp
+                        (<input type="text" style="width: auto; outline: none; border: none; width:7vw; font-size: 1.2em;"
                             :disabled="isEditor" v-model="item.P1">)
                     </div>
                     <div>
-                        p2
-                        (<input type="text" style="width: auto; outline: none; border: none; width:7vw"
+                        <span style="font-size: 1.2em; display:inline-block;">p2</span> 
+                        &nbsp &nbsp
+                        (<input type="text" style="width: auto; outline: none; border: none; width:7vw;font-size: 1.2em;"
                             :disabled="isEditor" v-model="item.P2">)
                     </div>
                 </div>
@@ -47,9 +52,10 @@
 <script setup>
 import { reactive, watch, ref } from 'vue'
 import { injectObject3D } from './js/state';
-import { Lock, CircleClose, Check } from '@element-plus/icons-vue'
+import { Lock, CircleClose, Check, IceCreamRound } from '@element-plus/icons-vue'
 const object3D = injectObject3D()
 let isEditor = ref(true)
+let isLock = ref(false)
 let { pObject } = object3D.line
 
 watch(() => object3D.stateContext.isRender, (newValue) => {
@@ -119,4 +125,36 @@ let cancel = (item) => {
     pObject.splice(pObject.indexOf(item), 1)
     object3D.line.cancelDashedLine(item.id)
 }
+let lock = (item) => {
+    isLock.value = !isLock.value
+    if (item.isLock) {
+        item.isLock = false
+    } else {
+        item.isLock = [[], []]
+        let indexMap = {
+            0: object3D.geometry.parameters.width,
+            1: object3D.geometry.parameters.height,
+            2: object3D.geometry.parameters.depth,
+        };
+        let p1 = item.P1.split(',').map(item => Number(item))
+        let p2 = item.P2.split(',').map(item => Number(item))
+        for(let i = 0; i < 3; i++){
+            if(p1[i]==indexMap[i]){
+                item.isLock[0].push(i)
+            }
+        }
+        for(let i = 0; i < 3; i++){
+            if(p2[i]==indexMap[i]){
+                item.isLock[1].push(i)
+            }
+        }
+        console.log(item.isLock)
+    }
+}
 </script>
+
+<style scoped>
+.is-locked {
+    color: blue;
+}
+</style>
