@@ -2,35 +2,25 @@
     <div id="header"></div>
     <div id="main">
         <div id="left">
-            <slider type="width" style="margin-bottom: 40px;" />
-            <slider type="length" style="margin-bottom: 40px;" />
-            <slider type="height" style="margin-bottom: 40px;" />
-            <colorSwitch style="margin-bottom: 40px;" />
-            <rotation style="margin-bottom: 40px;" />
+            left
         </div>
         <div id="middle">
-            <scene />
+            <interactiveScene />
         </div>
         <div id="right">
-            <snapshot v-if="isReady" />
-            <frontArrow style="margin-top: 5vh;"/>
+            right
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
-import scene from '@/components/scene.vue';
-import { slider, colorSwitch, rotation, snapshot, frontArrow } from '@/components'
-import { provideObject3D } from '@/js/state';
-provideObject3D()
+import { slider, colorSwitch, rotation, snapshot, frontArrow, dashLine, interactiveScene } from '@/components'
 
 let isReady = ref(false)
 onMounted(() => {
-    
     nextTick(() => {
         isReady.value = true
-        // console.log(window.threeApp)
     })
 })
 </script>

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, provide ,inject } from 'vue'
-import { ThreeApp } from './js/ThreeApp'
-import { injectObject3D } from './js/state';
+import { ThreeApp } from '@/js/ThreeApp'
+import { injectObject3D } from '@/js/state';
 let webgl = ref(null)
 let threeApp
 const cubeObj = injectObject3D()

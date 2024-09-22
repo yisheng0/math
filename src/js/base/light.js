@@ -1,13 +1,13 @@
-import * as THREE from 'three'
+import { HemisphereLight, DirectionalLight, Scene } from 'three'
 
 function createFillLight(){
-    const fillLight1 = new THREE.HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
+    const fillLight1 = new HemisphereLight( 0x8dc1de, 0x00668d, 1.5 );
     fillLight1.position.set( 2, 1, 1 );
     return fillLight1
 }
 
 function createDirectionLight(){
-    const directionalLight = new THREE.DirectionalLight( 0xffffff, 2.5 );
+    const directionalLight = new DirectionalLight( 0xffffff, 2.5 );
     directionalLight.position.set( - 5, 25, - 1 );
     directionalLight.castShadow = true;
     directionalLight.shadow.camera.near = 0.01;
@@ -30,7 +30,7 @@ function createDirectionLight(){
 export default function addLight(scene){
     let fillLight1 = createFillLight()
     let directionalLight = createDirectionLight()
-    if(scene instanceof THREE.Scene){
+    if(scene instanceof Scene){
         scene.add(fillLight1)
         scene.add(directionalLight)
     }

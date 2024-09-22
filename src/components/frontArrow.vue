@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { injectObject3D } from './js/state';
+import { injectObject3D } from '@/js/state';
 let value = ref(false)
 
 let object3D = injectObject3D()

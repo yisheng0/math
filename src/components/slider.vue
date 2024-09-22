@@ -11,7 +11,7 @@
 </template>
 <script setup>
 import { ref, watch } from 'vue';
-import { injectObject3D } from './js/state';
+import { injectObject3D } from '@/js/state';
 const props = defineProps({
   type: {
     type: String,

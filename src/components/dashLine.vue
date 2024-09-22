@@ -51,7 +51,7 @@
 </template>
 <script setup>
 import { reactive, watch, ref } from 'vue'
-import { injectObject3D } from './js/state';
+import { injectObject3D } from '@/js/state';
 import { Lock, CircleClose, Check, IceCreamRound } from '@element-plus/icons-vue'
 const object3D = injectObject3D()
 let isEditor = ref(true)

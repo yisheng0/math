@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { injectObject3D } from './js/state';
+import { injectObject3D } from '@/js/state';
 const object3D = injectObject3D();
 const selectedColor = ref('');
 const colors = [

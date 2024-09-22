@@ -14,7 +14,7 @@ import {
   SpriteMaterial,
   Sprite,
   CanvasTexture,
-  BufferAttribute
+  BufferAttribute,
 } from "three";
 import { DashedLine } from "./tool/line";
 import { reactive } from "vue";
@@ -37,14 +37,13 @@ class Cube {
     });
     this.dashedEdges = new LineSegments(edges, dashedMaterial);
     this.cube.add(this.dashedEdges);
-    // console.log(this.cube)
     // 自动旋转
     this.animationFrameId = null;
     // 正箭头
     this.arrow = null;
 
     // 创建八个顶点的标签
-    this.vertexLabels = [];
+    this.vertexLabels = new Map();
     // this.addVertexLabels();
     this.line = new DashedLine(this.cube);
     this.stateContext = reactive({
@@ -96,7 +95,6 @@ class Cube {
     this.dashedEdges.geometry = edges;
     // 虚线
     let arr = this.line.pObject.filter((item) => item.isLock !== false);
-    console.log(arr);
     for (let item of arr) {
       let line = this.line.lineMap.get(item.id);
       let P1 = item.P1.split(",").map(Number);
@@ -112,6 +110,7 @@ class Cube {
       }
       item.P1 = P1.join(",");
       item.P2 = P2.join(",");
+      // 方法二 矩阵变换实现，性能更好
       // const positions = new Float32Array([
       //  ...P1,
       //  ...P2,
@@ -121,10 +120,11 @@ class Cube {
       //   "position",
       //   new BufferAttribute(positions, 3)
       // );
-      
+
       // line.geometry.attributes.position.needsUpdate = true; // 标记为需要更新
       this.cube.remove(line);
-      this.drawDashedLine(P1, P2, item.id)
+      this.removeVertexLabels(item.id);
+      this.drawDashedLine(P1, P2, item.id);
     }
   }
 
@@ -183,26 +183,61 @@ class Cube {
 
   drawDashedLine(p1, p2, id) {
     this.line.drawDashedLine(p1, p2, id);
+    let vertexNames = id.split("");
+    let vertices = [
+      new Vector3(p1[0], p1[1] + 0.5, p1[2]),
+      new Vector3(p2[0], p2[1] + 0.5, p2[2]),
+    ];
+    this.addVertexLabels(vertexNames, vertices);
   }
 
-  addVertexLabels() {
-    const vertexNames = ["A1", "A", "B1", "B", "C1", "C", "D1", "D"];
-    const vertices = [
-      new Vector3(-2.3, 2.3, 2.3), // A1
-      new Vector3(2, 2, 2), // A
-      new Vector3(2.3, -2.3, 2.3), // B1
-      new Vector3(-2, -2, 2), // B
-      new Vector3(-2, 2, -2), // C1
-      new Vector3(2, 2, -2), // C
-      new Vector3(2.3, -2.3, -2.3), // D1
-      new Vector3(-2, -2, -2), // D
-    ];
+  // label
+  addVertexLabels(vertexNames, vertices) {
+    // const vertexNames = ["A1", "A", "B1", "B", "C1", "C", "D1", "D"];
+    // const vertices = [
+    //   new Vector3(-2.3, 2.3, 2.3), // A1
+    //   new Vector3(2, 2, 2), // A
+    //   new Vector3(2.3, -2.3, 2.3), // B1
+    //   new Vector3(-2, -2, 2), // B
+    //   new Vector3(-2, 2, -2), // C1
+    //   new Vector3(2, 2, -2), // C
+    //   new Vector3(2.3, -2.3, -2.3), // D1
+    //   new Vector3(-2, -2, -2), // D
+    // ];
 
     for (let i = 0; i < vertices.length; i++) {
       const label = this.createTextSprite(vertexNames[i]);
       label.position.copy(vertices[i]);
+      const halfWidth = this.cube.geometry.parameters.width / 2;
+      const halfHeight = this.cube.geometry.parameters.height / 2;
+      const halfDepth = this.cube.geometry.parameters.depth / 2;
+      const matrix = new Matrix4();
+      matrix.set(
+        1,
+        0,
+        0,
+        -halfWidth,
+        0,
+        1,
+        0,
+        -halfHeight,
+        0,
+        0,
+        1,
+        -halfDepth,
+        0,
+        0,
+        0,
+        1
+      );
+      label.applyMatrix4(matrix);
       this.cube.add(label);
-      this.vertexLabels.push(label);
+      let labels = this.vertexLabels.get(vertexNames.join(""));
+      if (!labels) {
+        labels = [];
+      }
+      labels.push(label);
+      this.vertexLabels.set(vertexNames.join(""), labels);
     }
   }
 
@@ -225,7 +260,18 @@ class Cube {
     const sprite = new Sprite(spriteMaterial);
     sprite.scale.set(1, 1, 1); // 调整标签大小
 
+    // sprite.lookAt(camera.position);
     return sprite;
+  }
+
+  removeVertexLabels(id) {
+    let label = this.vertexLabels.get(id);
+    if (label.length > 0) {
+      for (let item of label) {
+        this.cube.remove(item);
+      }
+      this.vertexLabels.delete(id);
+    }
   }
 }
 

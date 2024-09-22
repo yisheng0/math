@@ -22,7 +22,7 @@
 import { ref, onMounted, nextTick } from 'vue';
 import scene from '@/components/scene.vue';
 import { slider, colorSwitch, rotation, snapshot, frontArrow, dashLine } from '@/components'
-import { provideObject3D } from '../components/js/state';
+import { provideObject3D } from '@/js/state';
 provideObject3D()
 
 let isReady = ref(false)

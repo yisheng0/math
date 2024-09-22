@@ -4,11 +4,13 @@ import rotation from "./rotation.vue";
 import snapshot from "./snapshot.vue";
 import frontArrow from "./frontArrow.vue";
 import dashLine from "./dashLine.vue";
+import interactiveScene from "./interactiveScene.vue";
 export {
     slider,
     colorSwitch,
     rotation,
     snapshot,
     frontArrow,
-    dashLine
+    dashLine,
+    interactiveScene
 }
