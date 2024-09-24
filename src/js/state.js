@@ -1,5 +1,5 @@
 import { inject, provide } from "vue";
-import { Cube } from "./geometry";
+import { Cube, Interactive } from "./geometry";
 const stateSymbol = Symbol("object3D");
 
 export function injectObject3D() {

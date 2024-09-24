@@ -63,6 +63,7 @@ class ThreeApp {
         return this.renderer.domElement.toDataURL("image/png");
     }
     renderThreeViewsForObjects(objects) {
+        // this.resetPerspective()
         const boundingBox = new Box3();
     
         // 计算所有物体的包围盒
@@ -107,7 +108,11 @@ class ThreeApp {
         });
         return arr
     }
-    
+    resetPerspective(){
+        console.log("重置相机")
+        console.log(this)
+        this.control.reset()
+    }
 }
 
 export { ThreeApp }

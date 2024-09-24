@@ -41,9 +41,17 @@ class Interactive {
     this.objects.push(this.plane);
     this.threeApp = threeApp;
     this.gridHelper = new GridHelper(10, 10);
+    this.threeApp.control.enablePan = false;
+    this.threeApp.control.enableZoom  = false;
+    // this.threeApp.scene.add(this.rollOverMesh)
     // this.gridHelper.position.y = -0.5;
   }
-  onPointerMove(event) {
+  onPointerMove(event,isAdd) {
+    if(!isAdd) {
+      this.threeApp.scene.remove(this.rollOverMesh)
+      return
+    };
+    this.threeApp.scene.add(this.rollOverMesh)
     const canvasRect =
       this.threeApp.renderer.domElement.getBoundingClientRect();
     const canvasX = event.clientX - canvasRect.left;
@@ -70,7 +78,7 @@ class Interactive {
     }
   }
 
-  onPointerDown(event, isShiftDown) {
+  onPointerDown(event, isAdd,isRemove) {
     const canvasRect =
       this.threeApp.renderer.domElement.getBoundingClientRect();
     const canvasX = event.clientX - canvasRect.left;
@@ -86,12 +94,13 @@ class Interactive {
       const intersect = intersects[0];
 
       // delete cube
-      if (isShiftDown) {
+      if (isRemove) {
         if (intersect.object !== this.plane) {
           this.plane.remove(intersect.object);
-          this.objects.splice(objects.indexOf(intersect.object), 1);
+          this.objects.splice(this.objects.indexOf(intersect.object), 1);
         }
-      } else {
+      } 
+      if(isAdd){
         const gridSize = 1;
         const pos = intersect.point.clone();
         pos.x = Math.floor(pos.x / gridSize) * gridSize + gridSize / 2;
@@ -111,6 +120,15 @@ class Interactive {
         this.objects.push(voxel);
       }
     }
+  }
+  clearObjects() {
+    // console.log(this); 
+    this.objects.forEach((obj) => {
+      if(obj!== this.plane){
+        this.plane.remove(obj);
+      }
+    });
+    this.objects = [this.plane];
   }
 }
 export { Interactive };
