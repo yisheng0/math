@@ -1,16 +1,18 @@
-import { createMemoryHistory, createRouter, createWebHistory } from "vue-router";
-import { Main, lineMain, interactiveMain } from "@/view";
+import {
+  createMemoryHistory,
+  createRouter,
+  createWebHistory,
+} from "vue-router";
+import { Main, lineMain, interactiveMain, home } from "@/view";
 
 const routes = [
   {
     path: "/",
+    component: home,
+  },
+  {
+    path: "/base",
     component: Main,
-    // children: [
-    //   {
-    //     path: "line",
-    //     component: lineMain,
-    //   },
-    // ],
   },
   { path: "/line", component: lineMain },
   { path: "/interactive", component: interactiveMain },

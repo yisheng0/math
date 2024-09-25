@@ -49,8 +49,34 @@
             <img :src="imageSrc" :class="{ 'show-img': imageSrc }" class="webgl-overlay">
         </div>
         <div id="right">
-            <el-button  @click="snapshot">俯视图</el-button>
-            <el-icon @click="imageSrc = ''" v-show="imageSrc" style="background-color: #DC6374; border-radius: 50%; padding: 5px; margin-top:20px">
+            <el-button plain @click="snapshot('front')" style="margin-left: 12px;">
+                <div class="views">
+                    <span>正视图</span>
+                    <el-icon>
+                        <Top />
+                    </el-icon>
+                </div>
+            </el-button>
+            <el-button plain @click="snapshot('side')">
+                <div class="views">
+                    <span>侧视图</span>
+                    <el-icon>
+                        <Right />
+                    </el-icon>
+                </div>
+
+            </el-button>
+            <el-button plain @click="snapshot('top')">
+                <div class="views">
+                    <span>顶视图</span>
+                    <el-icon>
+                        <Download />
+                    </el-icon>
+                </div>
+
+            </el-button>
+            <el-icon @click="imageSrc = ''" v-show="imageSrc"
+                style="background-color: #DC6374; border-radius: 50%; padding: 10px; margin-top:10px">
                 <Close />
             </el-icon>
         </div>
@@ -60,19 +86,25 @@
 <script setup>
 import { ref, onMounted, reactive, onUnmounted } from 'vue';
 import { interactiveScene } from '@/components'
-import { DeleteFilled, Refresh, Close } from '@element-plus/icons-vue'
+import { DeleteFilled, Refresh, Close, Top, Right, Download } from '@element-plus/icons-vue'
+// import { Box3 } from 'three';
 
 let isAdd = ref(false)
 let isRemove = ref(false)
 let scene = reactive({})
 let isSpacePressed = false;
 let imageSrc = ref('')
-let snapshot = () => {
-    let objects = scene.interactive.objects.splice(1, scene.interactive.objects.length)
+let snapshot = (view) => {
+    if (imageSrc.value) imageSrc.value = '';
+    console.log(view)
+    // let objects = scene.interactive.objects.splice(1, scene.interactive.objects.length)
+    // 创建对象的副本，以避免修改原始数组
+    let objects = [...scene.interactive.objects];
+
     // three响应式与vue响应式冲突，导致three无法响应vue的修改
-    //   let urlArr = scene.interactive.threeApp.renderThreeViewsForObjects(objects)
-    let urlArr = window.threeApp.renderThreeViewsForObjects(objects)
-    imageSrc.value = urlArr[1]
+    // let urlArr = scene.interactive.threeApp.renderThreeViewsForObjects(objects)
+    let url = window.threeApp.renderThreeViewsForObjects(objects, view)
+    imageSrc.value = url
 }
 const handleKeyDown = (event) => {
     if (event.code === 'Space') {
@@ -147,24 +179,18 @@ onUnmounted(() => {
     position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+    user-select: none;
 
-    .webgl,
     .webgl-overlay {
-        width: 100%;
-        height: 100%;
         position: absolute;
-        top: 0;
-        left: 0;
-    }
-
-    .webgl {
-        pointer-events: all;
-    }
-
-    .webgl-overlay {
         z-index: 2;
         opacity: 0;
-        pointer-events: none
+        pointer-events: none;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(2);
+        object-fit: none;
     }
 
     .webgl-overlay.show-img {
@@ -174,7 +200,7 @@ onUnmounted(() => {
 
 #right {
     background-color: #FEFEFE;
-    flex: 0 0 20%;
+    flex: 0 0 16%;
     user-select: none;
     display: flex;
     align-items: center;
@@ -194,5 +220,19 @@ onUnmounted(() => {
     /* 深色字体，例如深灰色 */
     font-weight: bold;
     /* 加粗 */
+}
+
+.views {
+    width: 12vw;
+    border-radius: 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+:deep(.el-button) {
+    height: 5vh;
+    margin-bottom: 20px;
+
 }
 </style>
