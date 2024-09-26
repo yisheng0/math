@@ -42,8 +42,10 @@ class Cube {
     // 正箭头
     this.arrow = null;
 
-    // 创建八个顶点的标签
+    // 线标签Map
     this.vertexLabels = new Map();
+    // sprites标签Map
+    this.sprites = new Map();
     // this.addVertexLabels();
     this.line = new DashedLine(this.cube);
     this.stateContext = reactive({
@@ -119,8 +121,28 @@ class Cube {
       // line.geometry.setAttribute(
       //   "position",
       //   new BufferAttribute(positions, 3)
+      // ); 
+      // const matrix = new Matrix4();
+      // matrix.set(
+      //   1,
+      //   0,
+      //   0,
+      //   -line.matrix.elements[12],
+      //   0,
+      //   1,
+      //   0,
+      //   -line.matrix.elements[12],
+      //   0,
+      //   0,
+      //   1,
+      //   -line.matrix.elements[14],
+      //   0,
+      //   0,
+      //   0,
+      //   1
       // );
-
+      // line.applyMatrix4(matrix);
+      // 二次变换
       // line.geometry.attributes.position.needsUpdate = true; // 标记为需要更新
       this.cube.remove(line);
       this.removeVertexLabels(item.id);
@@ -193,21 +215,21 @@ class Cube {
 
   // label
   addVertexLabels(vertexNames, vertices) {
-    // const vertexNames = ["A1", "A", "B1", "B", "C1", "C", "D1", "D"];
-    // const vertices = [
-    //   new Vector3(-2.3, 2.3, 2.3), // A1
-    //   new Vector3(2, 2, 2), // A
-    //   new Vector3(2.3, -2.3, 2.3), // B1
-    //   new Vector3(-2, -2, 2), // B
-    //   new Vector3(-2, 2, -2), // C1
-    //   new Vector3(2, 2, -2), // C
-    //   new Vector3(2.3, -2.3, -2.3), // D1
-    //   new Vector3(-2, -2, -2), // D
-    // ];
-
     for (let i = 0; i < vertices.length; i++) {
-      const label = this.createTextSprite(vertexNames[i]);
-      label.position.copy(vertices[i]);
+      let obj = this.sprites.get(vertexNames[i]);
+      let label = obj ? obj.sprite : null;
+      if (obj) {
+        obj.length += 1;
+        obj.sprite.position.copy(vertices[i]);
+      } else {
+        label = this.createTextSprite(vertexNames[i]);
+        label.position.copy(vertices[i]);
+        obj = {
+          length: 1,
+          sprite: label,
+        };
+        this.cube.add(label);
+      }
       const halfWidth = this.cube.geometry.parameters.width / 2;
       const halfHeight = this.cube.geometry.parameters.height / 2;
       const halfDepth = this.cube.geometry.parameters.depth / 2;
@@ -231,7 +253,8 @@ class Cube {
         1
       );
       label.applyMatrix4(matrix);
-      this.cube.add(label);
+      this.sprites.set(vertexNames[i], obj);
+
       let labels = this.vertexLabels.get(vertexNames.join(""));
       if (!labels) {
         labels = [];
@@ -265,12 +288,18 @@ class Cube {
   }
 
   removeVertexLabels(id) {
-    let label = this.vertexLabels.get(id);
-    if (label.length > 0) {
-      for (let item of label) {
-        this.cube.remove(item);
+    // let label = this.vertexLabels.get(id);
+    this.vertexLabels.delete(id);
+    let arr = id.split("");
+    for (let i = 0; i < arr.length; i++) {
+      let obj = this.sprites.get(arr[i]);
+      if (obj) {
+        obj.length -= 1;
+        if (obj.length === 0) {
+          this.cube.remove(obj.sprite);
+          this.sprites.delete(arr[i]);
+        }
       }
-      this.vertexLabels.delete(id);
     }
   }
 }

@@ -24,7 +24,7 @@
                             <el-icon style="margin-right: 8px;">
                                 <CircleClose @click="cancel(item)" />
                             </el-icon>
-                            <el-icon @click="lock(item)" :class="{ 'is-locked': isLock }">
+                            <el-icon @click="lock(item)" :class="{ 'is-locked': !!(item.isLock) }">
                                 <IceCreamRound />
                             </el-icon>
                         </div>
@@ -50,7 +50,7 @@
 
 </template>
 <script setup>
-import { reactive, watch, ref } from 'vue'
+import { watch, ref, onMounted } from 'vue'
 import { injectObject3D } from '@/js/state';
 import { Lock, CircleClose, Check, IceCreamRound } from '@element-plus/icons-vue'
 const object3D = injectObject3D()
@@ -58,6 +58,13 @@ let isEditor = ref(true)
 let isLock = ref(false)
 let { pObject } = object3D.line
 
+onMounted(()=>{
+    for(let item of pObject){
+        let P1n = item.P1.split(',').map(item => Number(item))
+        let P2n = item.P2.split(',').map(item => Number(item))
+        object3D.drawDashedLine(P1n, P2n, item.id)
+    }
+})
 watch(() => object3D.stateContext.isRender, (newValue) => {
     console.log("改变了")
     object3D.stateContext.isRender = false
@@ -124,6 +131,7 @@ let cancel = (item) => {
     }
     pObject.splice(pObject.indexOf(item), 1)
     object3D.line.cancelDashedLine(item.id)
+    object3D.removeVertexLabels(item.id)
 }
 let lock = (item) => {
     isLock.value = !isLock.value

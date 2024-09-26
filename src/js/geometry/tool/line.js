@@ -15,6 +15,12 @@ class DashedLine {
           P2: "2.5, 4.0, 0.0",
           isLock: false,
       },
+      {
+        id: "AC",
+        P1: "0.0, 1.0, 0.0",
+        P2: "2.5, 4.0, 0.0",
+        isLock: false,
+    },
   ])
     this.lineMap = new Map();
     this.lockLine = {};
@@ -64,7 +70,7 @@ class DashedLine {
 
     // 应用矩阵到线条对象上
     line.applyMatrix4(matrix);
-    console.log(id);
+    // console.log(id);
     this.lineMap.set(id, line);
     this.cube.add(line);
   }
@@ -87,6 +93,7 @@ class DashedLine {
     return this.line;
   }
   cancelDashedLine(id) {
+    console.log("cancelDashedLine", id);
     const line = this.lineMap.get(id);
     if (line) {
       this.cube.remove(line);
