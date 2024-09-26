@@ -17,6 +17,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const items = [
     { label: '矩形展示', path: '/base' },
+    { label: '矩阵变换', path: '/math' },
     { label: '模型工厂', path: '/line' },
     { label: '交互三视图', path: '/interactive' }
 ];

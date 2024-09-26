@@ -3,7 +3,7 @@ import {
   createRouter,
   createWebHistory,
 } from "vue-router";
-import { Main, lineMain, interactiveMain, home } from "@/view";
+import { Main, lineMain, interactiveMain, home, baseMain } from "@/view";
 
 const routes = [
   {
@@ -16,6 +16,7 @@ const routes = [
   },
   { path: "/line", component: lineMain },
   { path: "/interactive", component: interactiveMain },
+  { path: "/math", component: baseMain },
 ];
 
 export const router = createRouter({
