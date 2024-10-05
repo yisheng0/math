@@ -5,41 +5,31 @@
                 <span style="margin: -5px;">{{stringValue}}</span>
                 <el-tag type="info" style="width: 36px;">{{ value }}</el-tag>
             </div>
-            <el-slider size="small" v-model="value" :min="0" :max="6" :step="1" />
+            <el-slider size="small" v-model="value" :min="2" :max="10" :step="1" />
         </div>
     </el-card>
 </template>
 <script setup>
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
 import { injectObject3D } from '@/js/state';
 const props = defineProps({
   type: {
     type: String,
-    validator: (value) => ['width', 'depth', 'height', 'radiusTop', 'radiusBottom'].includes(value)
   }
 });
+const value = ref(4);
 const object3D = injectObject3D();
-let nu = object3D.geometry.parameters[props.type]
-const value = ref(nu);
 let stringValue = ref('');
-
-
-if (object3D) {
+if (object3D && ['length', 'width', 'height'].includes(props.type)) {
   const map = {
-    depth: () => object3D.setDepth(value.value),
+    length: () => object3D.setDepth(value.value),
     width: () => object3D.setWidth(value.value),
-    height: () => object3D.setHeight(value.value),
-    radiusTop: () => object3D.setTopRadius(value.value),
-    radiusBottom: () => object3D.setBottomRadius(value.value)
+    height: () => object3D.setHeight(value.value)
   };
-
   const stringMap = {
-    depth: '长',
+    length: '长',
     width: '宽',
-    height: '高',
-    radiusTop: '顶部r',
-    radiusBottom: '底部r'
+    height: '高'
   }
   stringValue = stringMap[props.type];
   const fn = map[props.type];

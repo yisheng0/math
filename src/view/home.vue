@@ -16,13 +16,18 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const items = [
-    { label: '矩形展示', path: '/base' },
+    { label: '矩形展示', path: '/base', params: { shape: 'rectangle' } },
+    { label: '圆柱展示', path: '/base', params: { shape: 'cylinder' } },
     { label: '矩阵变换', path: '/math' },
     { label: '模型工厂', path: '/line' },
     { label: '交互三视图', path: '/interactive' }
 ];
 const navigate = (item) => {
-    router.push(item.path);
+    if (item.params) {
+        router.push({ path: item.path, query: item.params });
+    } else {
+        router.push(item.path);
+    }
 };
 </script>
 

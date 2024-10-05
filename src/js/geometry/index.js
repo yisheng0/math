@@ -1,3 +1,4 @@
 import { Cube } from "./cube";
 import { Interactive } from "./interactive";
-export { Cube, Interactive };
+import { Cylinder } from "./cylinder";
+export { Cube, Interactive, Cylinder };

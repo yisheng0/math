@@ -2,9 +2,9 @@
     <div id="header"></div>
     <div id="main">
         <div id="left">
-            <slider type="width" style="margin-bottom: 40px;" />
-            <slider type="length" style="margin-bottom: 40px;" />
-            <slider type="height" style="margin-bottom: 40px;" />
+            <sliderLine type="width" style="margin-bottom: 40px;" />
+            <sliderLine type="length" style="margin-bottom: 40px;" />
+            <sliderLine type="height" style="margin-bottom: 40px;" />
             <colorSwitch style="margin-bottom: 40px;" />
             <rotation style="margin-bottom: 40px;" />
             <frontArrow style="margin-bottom: 40px" />
@@ -21,13 +21,12 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue';
 import scene from '@/components/scene.vue';
-import { slider, colorSwitch, rotation, snapshot, frontArrow, dashLine } from '@/components'
+import { sliderLine, colorSwitch, rotation, frontArrow, dashLine } from '@/components'
 import { provideObject3D } from '@/js/state';
 provideObject3D()
 
 let isReady = ref(false)
 onMounted(() => {
-
     nextTick(() => {
         isReady.value = true
     })

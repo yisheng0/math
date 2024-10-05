@@ -5,6 +5,7 @@ import snapshot from "./snapshot.vue";
 import frontArrow from "./frontArrow.vue";
 import dashLine from "./dashLine.vue";
 import interactiveScene from "./interactiveScene.vue";
+import sliderLine from "./sliderLine.vue";
 export {
     slider,
     colorSwitch,
@@ -12,5 +13,6 @@ export {
     snapshot,
     frontArrow,
     dashLine,
-    interactiveScene
+    interactiveScene,
+    sliderLine
 }

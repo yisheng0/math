@@ -2,9 +2,9 @@
     <div id="header"></div>
     <div id="main">
         <div id="left">
-            <slider type="width" style="margin-bottom: 40px;" />
-            <slider type="length" style="margin-bottom: 40px;" />
-            <slider type="height" style="margin-bottom: 40px;" />
+            <slider :type="sliderTypes[0]" style="margin-bottom: 40px;" />
+            <slider :type="sliderTypes[1]" style="margin-bottom: 40px;" />
+            <slider :type="sliderTypes[2]" style="margin-bottom: 40px;" />
             <colorSwitch style="margin-bottom: 40px;" />
             <rotation style="margin-bottom: 40px;" />
         </div>
@@ -19,15 +19,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
+import { useRoute } from 'vue-router';
 import scene from '@/components/scene.vue';
 import { slider, colorSwitch, rotation, snapshot, frontArrow } from '@/components'
 import { provideObject3D } from '@/js/state';
-provideObject3D()
 
 let isReady = ref(false)
+const route = useRoute();
+const sliderTypes = computed(() => {
+    if (route.query.shape === 'cylinder') {
+        return ['radiusTop', 'radiusBottom', 'height'];
+    }
+    if(route.query.shape === 'rectangle') {
+        return ['width', 'depth', 'height'];
+    }
+});
+
+
+provideObject3D(route.query.shape)
 onMounted(() => {
-    
+    // console.log(route.query.shape)
     nextTick(() => {
         isReady.value = true
         // console.log(window.threeApp)
